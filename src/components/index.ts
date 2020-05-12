@@ -1,22 +1,13 @@
 import Vue from 'vue'
-// @ts-ignore
-import Radio from './radio/index.vue'
-// @ts-ignore
-import Select from './select/index.vue'
-// @ts-ignore
-import Checkbox from './checkbox/index.vue'
-// @ts-ignore
-import ConfirmDialog from './confirm-dialog/index.vue'
-// @ts-ignore
-import AlertDialog from './alert-dialog/index.vue'
-// @ts-ignore
-import SwipeLeftDelete from './swipe-left-delete/index.vue'
-// @ts-ignore
-import SwitchBtn from './switch-btn/index.vue'
-// @ts-ignore
-import Toast from './toast/index.vue'
-// @ts-ignore
-import Loading from './loading/index.vue'
+import Radio from '@/components/radio/index.vue'
+import Select from '@/components/select/index.vue'
+import Checkbox from '@/components/checkbox/index.vue'
+import ConfirmDialog from '@/components/confirm-dialog/index.vue'
+import AlertDialog from '@/components/alert-dialog/index.vue'
+import SwipeLeftDelete from '@/components/swipe-left-delete/index.vue'
+import SwitchBtn from '@/components/switch-btn/index.vue'
+import Toast from '@/components/toast/index.vue'
+import Loading from '@/components/loading/index.vue'
 
 const components: any[] = [
     Radio,
@@ -31,8 +22,8 @@ const components: any[] = [
 ]
 
 export class MyComponents {
-    static install () {
-        components.forEach(component => {
+    static install() {
+        components.forEach((component) => {
             Vue.component(component.componentName, component)
         })
     }

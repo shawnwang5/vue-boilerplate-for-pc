@@ -1,9 +1,4 @@
-import { userRoutes } from './user'
-import { forDevRoutes } from './for-dev'
-import { layoutRoutes } from './layout'
+import { userRoutes } from '@/routes/route/user'
+import { layoutRoutes } from '@/routes/route/layout'
 
-export const indexRoutes: any[ ] = [
-    ...userRoutes,
-    ...forDevRoutes,
-    ...layoutRoutes,
-]
+export const indexRoutes: any[] = [...userRoutes, ...layoutRoutes]

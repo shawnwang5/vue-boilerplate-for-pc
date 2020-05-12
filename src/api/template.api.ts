@@ -1,15 +1,15 @@
-import { HttpUtils } from '../utils/http'
-import { environments } from '../environments'
+import { HttpUtils } from '@/utils/http'
+import { environments } from '@/environments'
 
 export class TemplateApi {
-    static post (path: string, params = {}) {
+    static post(path: string, params = {}) {
         return HttpUtils.post(`${environments.apiBaseUrl + path}`, params)
     }
 
     /**
      * xxx
      */
-    static xxx () {
+    static xxx() {
         return TemplateApi.post(`xxx`, {})
     }
 }

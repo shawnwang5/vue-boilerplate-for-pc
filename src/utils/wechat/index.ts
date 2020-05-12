@@ -1,5 +1,5 @@
-import { environments } from '../../environments'
-import { UrlUtils } from '../url'
+import { environments } from '@/environments'
+import { UrlUtils } from '@/utils/url'
 
 const wechat: any = require('weixin-js-sdk')
 wechat.hideAllNonBaseMenuItem()
@@ -11,10 +11,14 @@ export class WechatUtils {
         timestamp: '',
         nonceStr: '',
         signature: '',
-        jsApiList: [ 'onMenuShareTimeline', 'onMenuShareAppMessage', 'hideMenuItems' ],
+        jsApiList: [
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage',
+            'hideMenuItems',
+        ],
     }
 
-    static modifyDocumentTitle (title: string) {
+    static modifyDocumentTitle(title: string) {
         let ua = navigator.userAgent
         document.title = title
         if (WechatUtils.isWechat() && ua.indexOf('iPhone') > -1) {
@@ -22,59 +26,79 @@ export class WechatUtils {
             iframe.src = '/favicon.ico'
             iframe.style.display = 'none'
             document.body.appendChild(iframe)
-            setTimeout(function () {
+            setTimeout(function() {
                 document.body.removeChild(iframe)
             }, 100)
         }
     }
 
-    static isWechat () {
+    static isWechat() {
         return /micromessenger/.test(navigator.userAgent.toLowerCase())
     }
 
-    static getCode () {
+    static getCode() {
         return UrlUtils.getValue(location.href, 'code')
     }
 
-    static baseAuthentication () {
-        location.replace(`https://open.weixin.qq.com/connect/oauth2/authorize?appid=${environments.wechatAppId}&redirect_uri=${encodeURIComponent(location.href)}&response_type=code&scope=snsapi_base#wechat_redirect`)
+    static baseAuthentication() {
+        location.replace(
+            `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${
+                environments.wechatAppId
+            }&redirect_uri=${encodeURIComponent(
+                location.href
+            )}&response_type=code&scope=snsapi_base#wechat_redirect`
+        )
     }
 
-    static userAuthentication () {
-        location.replace(`https://open.weixin.qq.com/connect/oauth2/authorize?appid=${environments.wechatAppId}&redirect_uri=${encodeURIComponent(location.href)}&response_type=code&scope=snsapi_userinfo#wechat_redirect`)
+    static userAuthentication() {
+        location.replace(
+            `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${
+                environments.wechatAppId
+            }&redirect_uri=${encodeURIComponent(
+                location.href
+            )}&response_type=code&scope=snsapi_userinfo#wechat_redirect`
+        )
     }
 
-    static initConfig (wechatConfig: any) {
+    static initConfig(wechatConfig: any) {
         wechat.config(wechatConfig)
         WechatUtils.hideMenuItems()
     }
 
-    static hideMenuItems () {
+    static hideMenuItems() {
         wechat.ready(() => {
             wechat.hideMenuItems({
-                menuList: [ 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:QZone', 'menuItem:openWithSafari',
-                    'menuItem:openWithQQBrowser', 'menuItem:readMode', 'menuItem:copyUrl', 'menuItem:share:email' ]
+                menuList: [
+                    'menuItem:share:qq',
+                    'menuItem:share:weiboApp',
+                    'menuItem:share:QZone',
+                    'menuItem:openWithSafari',
+                    'menuItem:openWithQQBrowser',
+                    'menuItem:readMode',
+                    'menuItem:copyUrl',
+                    'menuItem:share:email',
+                ],
             })
         })
     }
 
-    static wechatShare (shareConfig: any) {
+    static wechatShare(shareConfig: any) {
         wechat.ready(() => {
             // 分享到朋友圈
             wechat.onMenuShareTimeline({
                 title: shareConfig.title,
                 link: shareConfig.link,
                 imgUrl: shareConfig.imgUrl,
-                success () {
+                success() {
                     if (typeof shareConfig.success === 'function') {
                         shareConfig.success()
                     }
                 },
-                cancel () {
+                cancel() {
                     if (typeof shareConfig.cancel === 'function') {
                         shareConfig.cancel()
                     }
-                }
+                },
             })
             // 分享给朋友
             wechat.onMenuShareAppMessage({
@@ -84,16 +108,16 @@ export class WechatUtils {
                 imgUrl: shareConfig.imgUrl,
                 type: 'link',
                 dataUrl: '',
-                success () {
+                success() {
                     if (typeof shareConfig.success === 'function') {
                         shareConfig.success()
                     }
                 },
-                cancel () {
+                cancel() {
                     if (typeof shareConfig.cancel === 'function') {
                         shareConfig.cancel()
                     }
-                }
+                },
             })
         })
     }
