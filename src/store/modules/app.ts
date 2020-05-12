@@ -6,6 +6,7 @@ export const SCREEN = 'SCREEN'
 export const PAGE_TRANSITION = 'PAGE_TRANSITION'
 export const GLOBAL_COMPONENTS = 'GLOBAL_COMPONENTS'
 export const MENU = 'MENU'
+export const CUR_PAGINATION = 'CUR_PAGINATION'
 
 export interface PageTransition {
     name: string
@@ -17,23 +18,24 @@ export interface AppState {
     appHeight: string
     screen: {
         width: number
-    },
+    }
     pagination: {
         full: {
-            layout: string,
-            useSmall: boolean,
-        },
+            layout: string
+            useSmall: boolean
+        }
         small: {
-            layout: string,
-            useSmall: boolean,
-        },
-    },
+            layout: string
+            useSmall: boolean
+        }
+    }
+    curPagination: any
     menu: {
         modeType: {
-            horizontal: string,
-            vertical: string,
-        },
-        mode: string,
+            horizontal: string
+            vertical: string
+        }
+        mode: string
         defaultActive: string
     }
     pageTransition: PageTransition
@@ -56,6 +58,7 @@ const state: AppState = {
             useSmall: true,
         },
     },
+    curPagination: {},
     menu: {
         modeType: {
             horizontal: 'horizontal',
@@ -66,7 +69,7 @@ const state: AppState = {
     },
     pageTransition: {
         name: '',
-        duration: 280
+        duration: 280,
     },
     globalComponents: null,
 }
@@ -74,23 +77,26 @@ const state: AppState = {
 const getters = {}
 
 const mutations = {
-    [ BACK_API_TOKEN ] (state: AppState, payload: any) {
+    [BACK_API_TOKEN](state: AppState, payload: any) {
         state.backApiToken = payload
     },
-    [ APP_HEIGHT ] (state: AppState, payload: any) {
+    [APP_HEIGHT](state: AppState, payload: any) {
         state.appHeight = payload || 'auto'
     },
-    [ SCREEN ] (state: AppState, payload: any) {
+    [SCREEN](state: AppState, payload: any) {
         state.screen = payload
     },
-    [ MENU ] (state: AppState, payload: any) {
+    [MENU](state: AppState, payload: any) {
         state.menu = payload
     },
-    [ PAGE_TRANSITION ] (state: AppState, payload: any) {
+    [PAGE_TRANSITION](state: AppState, payload: any) {
         state.pageTransition = payload
     },
-    [ GLOBAL_COMPONENTS ] (state: AppState, payload: any) {
+    [GLOBAL_COMPONENTS](state: AppState, payload: any) {
         state.globalComponents = payload
+    },
+    [CUR_PAGINATION](state: AppState, payload: any) {
+        state.curPagination = { ...payload }
     },
 }
 
@@ -100,5 +106,5 @@ export default {
     state,
     getters,
     mutations,
-    actions
+    actions,
 }

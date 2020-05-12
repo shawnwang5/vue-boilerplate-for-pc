@@ -9,83 +9,108 @@
 </template>
 
 <script lang="ts">
-    import Vue from 'vue'
-    import Component from 'vue-class-component'
-    import { Route } from 'vue-router'
-    import { AppState, MENU, SCREEN } from '../../store/modules/app'
-    import { State } from 'vuex-class'
-    import { debounce } from 'throttle-debounce'
-    import Header from './components/header/index.vue'
-    import Menu from './components/menu/index.vue'
+import Vue from 'vue'
+import Component, { mixins } from 'vue-class-component'
+import { Route } from 'vue-router'
+import { AppState, MENU, SCREEN, CUR_PAGINATION } from '@/store/modules/app'
+import { State } from 'vuex-class'
+import { debounce } from 'throttle-debounce'
+import Header from '@/routes/layout/components/header/index.vue'
+import Menu from '@/routes/layout/components/menu/index.vue'
+import ParentVue from '@/routes/mixins/parent.ts'
 
-    Component.registerHooks([
-        'beforeRouteUpdate',
-    ])
+Component.registerHooks(['beforeRouteUpdate'])
 
-    @Component({
-        components: {
-            'my-header': Header,
-            'my-menu': Menu,
-        }
-    })
-    export default class MyComponent extends Vue {
-        @State('app') appState!: AppState
+@Component({
+    components: {
+        'my-header': Header,
+        'my-menu': Menu,
+    },
+})
+export default class MyComponent extends mixins(ParentVue) {
+    @State('app') appState!: AppState
 
-        onResizeFn: any
+    onResizeFn: any
 
-        get refs (): any {
-            return this.$refs
-        }
-
-        get menuIsHorizontal (): boolean {
-            return this.appState.menu.mode === this.appState.menu.modeType.horizontal
-        }
-
-        mounted () {
-            this.onResizeFn = debounce(500, this.onResize)
-            this.listenWindowResize()
-        }
-
-        onResize () {
-            const docWidth = document.documentElement.clientWidth
-            this.$store.commit(MENU, {
-                ...this.appState.menu,
-                mode: docWidth > 700 ? 'vertical' : 'horizontal',
-            })
-            this.$store.commit(SCREEN, {
-                width: docWidth,
-            })
-        }
-
-        listenWindowResize () {
-            this.onResize()
-            window.addEventListener('resize', this.onResizeFn)
-        }
-
-        destroyed () {
-            window.removeEventListener('resize', this.onResizeFn)
-        }
-
-        beforeRouteUpdate (to: Route, from: Route, next: Function) {
-            next()
-        }
-
-        logoClick () {
-            this.$store.commit(MENU, {
-                ...this.appState.menu,
-                defaultActive: '/layout/index/index',
-            })
-            this.$router.replace('/layout/index/index')
-        }
+    get menuIsHorizontal(): boolean {
+        return (
+            this.appState.menu.mode === this.appState.menu.modeType.horizontal
+        )
     }
+
+    async mounted() {
+        this.onResizeFn = debounce(500, this.onResize)
+        this.listenWindowResize()
+        this.setPaginationConfig()
+    }
+
+    setPaginationConfig() {
+        const appState: AppState = this.appState
+        const curPagination =
+            appState.screen.width > 700
+                ? appState.pagination.full
+                : appState.pagination.small
+        this.$store.commit(CUR_PAGINATION, curPagination)
+    }
+
+    onResize() {
+        const docWidth = document.documentElement.clientWidth
+        this.$store.commit(MENU, {
+            ...this.appState.menu,
+            mode: docWidth > 700 ? 'vertical' : 'horizontal',
+        })
+        this.$store.commit(SCREEN, {
+            width: docWidth,
+        })
+    }
+
+    listenWindowResize() {
+        this.onResize()
+        window.addEventListener('resize', this.onResizeFn)
+    }
+
+    destroyed() {
+        window.removeEventListener('resize', this.onResizeFn)
+    }
+
+    beforeRouteUpdate(to: Route, from: Route, next: Function) {
+        next()
+    }
+
+    logoClick() {
+        this.$store.commit(MENU, {
+            ...this.appState.menu,
+            defaultActive: '/layout/index/index',
+        })
+        this.$router.replace('/layout/index/index')
+    }
+}
 </script>
 
 <style lang="scss">
-    .page.layout > .content-container {
+.page.layout {
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 
-        & > .content {
-            overflow: auto;
+    & > .content-container {
+        flex: 1;
+        display: flex;
+        overflow: auto;
+
+        & > .menu.component {
+            flex: 3;
+        }
+
+        & > .page {
+            flex: 21;
+            padding: 0 0.2rem 0.2rem;
+            width: 100%;
             height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: auto;
             box-sizing: border-box;
 
             & > .el-breadcrumb {
@@ -98,6 +123,10 @@
                         color: #303133;
                     }
                 }
+            }
+
+            & > .el-form {
+                text-align: left;
             }
 
             .el-pagination {
@@ -116,45 +145,23 @@
                 }
             }
         }
-    }
-</style>
-<style lang="scss" scoped>
-    .page.layout {
-        height: 100%;
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
 
-        & > .content-container {
-            flex: 1;
-            display: flex;
-            overflow: auto;
+        @media screen and (max-width: 700px) {
+            & {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+            }
 
             & > .menu.component {
-                flex: 3;
+                flex: 0 0 auto;
+                height: auto;
             }
 
             & > .content {
-                flex: 21;
-                padding: 0 0.2rem 0.2rem;
-            }
-
-            @media screen and (max-width: 700px) {
-                & {
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: flex-start;
-                }
-
-                & > .menu.component {
-                    flex: 0 0 auto;
-                    height: auto;
-                }
-
-                & > .content {
-                    flex: 1;
-                }
+                flex: 1;
             }
         }
     }
+}
 </style>

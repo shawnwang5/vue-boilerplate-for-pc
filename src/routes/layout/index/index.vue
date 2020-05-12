@@ -1,5 +1,5 @@
 <template>
-    <div class="index-index content">
+    <div class="page layout__index__index">
         <el-breadcrumb separator="/">
             <el-breadcrumb-item>系统管理</el-breadcrumb-item>
             <el-breadcrumb-item class="active">首页</el-breadcrumb-item>
@@ -12,28 +12,19 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import Component from 'vue-class-component'
+import Component, { mixins } from 'vue-class-component'
+import ParentVue from '@/routes/mixins/parent.ts'
 
 @Component({})
-export default class IndexPage extends Vue {
-    get refs(): any {
-        return this.$refs
-    }
-
-    get query(): any {
-        return this.$route.query
-    }
-
-    mounted() {}
+export default class IndexPage extends mixins(ParentVue) {
+    async mounted() {}
 }
 </script>
 
-<style lang="scss" scoped>
-.index-index.content {
-    padding: 0 0.2rem;
-
+<style lang="scss">
+.page.layout__index__index {
     & > .page-desc {
-        margin: 0.2rem 0 0;
+        margin: 0.1rem 0;
         text-align: left;
         display: flex;
         flex-direction: column;
