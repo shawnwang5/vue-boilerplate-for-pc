@@ -52,10 +52,7 @@ export class HttpUtils {
                 try {
                     return JSON.parse(message)
                 } catch (e) {
-                    return {
-                        code: 500,
-                        message,
-                    }
+                    return { code: 500, message }
                 }
             } else {
                 throw e
