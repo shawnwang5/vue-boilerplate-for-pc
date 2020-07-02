@@ -3,7 +3,7 @@
         :close-on-click-modal="false"
         :title="dialogTitle"
         :visible.sync="dialog.isShow"
-        class="layout__files-dialog"
+        class="layout__list-dialog"
         lock-scroll
         append-to-body
         top="20vh"
@@ -87,7 +87,7 @@ export default class MyComponent extends mixins(ParentVue) {
 </script>
 
 <style lang="scss">
-.layout__files-dialog {
+.layout__list-dialog {
     .el-dialog__body {
         padding: 0 0.3rem 0.1rem;
 

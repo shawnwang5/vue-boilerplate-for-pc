@@ -32,6 +32,7 @@ const plugins = [
             if (/moment\/locale\/(?!zh-cn)/.test(resourcePath)) {
                 return true
             }
+            return false
         },
     }),
     new VueLoaderPlugin(),
@@ -80,10 +81,11 @@ function getDefinePluginObj() {
         const fileContent = fs.readFileSync(envFilePath).toString()
         const array = fileContent.split(/[\r\n]/)
         for (let i = 0, len = array.length; i < len; i++) {
-            if (array[i].startsWith('#')) {
+            const curRow = array[i].trim()
+            if (!curRow || curRow.startsWith('#')) {
                 continue
             }
-            const itemArray = array[i].split('=')
+            const itemArray = curRow.split('=')
             obj[itemArray[0]] = `'${itemArray[1]}'`
         }
     }

@@ -4,7 +4,7 @@
         @close="hide"
         :title="dialogTitle"
         :visible.sync="dialog.isShow"
-        class="layout-xx"
+        class="layout__xx"
         lock-scroll
         append-to-body
         top="2vh"
@@ -63,7 +63,7 @@ export default class MyComponent extends mixins(ParentVue) {
     height: $size;
 }
 
-.layout-xx {
+.layout__xx {
     & > .el-dialog {
         display: flex;
         flex-direction: column;

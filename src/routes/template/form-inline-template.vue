@@ -1,5 +1,5 @@
 <template>
-    <div class="component form-template">
+    <div class="component form-inline-template">
         <el-form ref="form" size="small" inline :model="form" label-width="80px" :rules="rules">
             <el-form-item label="内容" prop="collectionName">
                 <el-input v-model="form.collectionName" placeholder="请输入内容"></el-input>
@@ -147,7 +147,7 @@ export default class MyComponent extends mixins(ParentVue) {
 </script>
 
 <style lang="scss">
-.component.form-template {
+.component.form-inline-template {
     width: 100%;
     height: 100%;
     display: flex;
